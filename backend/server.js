@@ -4,6 +4,7 @@ import logger from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import { appDataSource } from './datasource.js';
 import { swaggerSpec } from './docs/swagger.js';
+import evaluationsRouter from './routes/evaluations.js';
 import hatedsRouter from './routes/hateds.js';
 import moviesRouter from './routes/movies.js';
 import usersRouter from './routes/users.js';
@@ -39,6 +40,7 @@ apiRouter.get('/', (req, res) => {
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/movies', moviesRouter);
 apiRouter.use('/hateds', hatedsRouter);
+apiRouter.use('/evaluations', evaluationsRouter);
 app.use('/api', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
@@ -61,5 +63,10 @@ export async function ensureDb() {
       console.error('Error during Data Source initialization:', err);
     });
 }
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Backend server is running on http://localhost:${PORT}`);
+});
 
 export default app;

@@ -1,28 +1,445 @@
-.choosen-movie-page {
+.movie-page {
   min-height: 100vh;
+  background: #0d0000;
+}
+
+/* ── Banner / Hero ───────────────────────────────── */
+
+.movie-page-banner {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .movie-page-banner {
+    height: 500px;
+  }
+}
+
+.movie-page-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(8px) brightness(0.3);
+  transform: scale(1.05);
+}
+
+.movie-page-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(13,0,0,0.2) 0%, #0d0000 100%);
+}
+
+.movie-page-hero {
+  position: relative;
+  z-index: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem 1rem;
-  background: #f5f7fa;
+  gap: 2rem;
+  align-items: flex-end;
+  padding: 1.5rem 2rem 2rem;
+  height: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.choosen-movie-card {
-  width: min(560px, 100%);
-  padding: 2rem;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  text-align: center;
+.movie-back-btn {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #4a0000;
+  color: #d0a0a0;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.choosen-movie-card h1 {
+.movie-back-btn:hover {
+  border-color: #c0392b;
+  color: #fff;
+}
+
+.movie-page-poster {
+  width: 140px;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  flex-shrink: 0;
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .movie-page-poster {
+    display: block;
+  }
+}
+
+.movie-page-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.movie-page-title {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  line-height: 1.1;
+}
+
+.movie-page-date {
+  margin: 0 0 0.25rem;
+  color: #d0a0a0;
+  font-size: 0.9rem;
+}
+
+.movie-page-rating {
   margin: 0 0 0.75rem;
-  font-size: 1.75rem;
-  color: #1f2937;
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 0.95rem;
 }
 
-.choosen-movie-card p {
+.movie-page-stats {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.movie-page-stat {
+  font-size: 0.85rem;
+  color: #d0a0a0;
+}
+
+.movie-dislike-btn {
+  background: #c0392b;
+  border: 2px solid #c0392b;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.movie-dislike-btn:hover:not(:disabled) {
+  background: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.movie-dislike-btn--active {
+  background: transparent;
+  border-color: #ff3333;
+  color: #ff6666;
+}
+
+.movie-dislike-btn--active:hover:not(:disabled) {
+  background: rgba(255, 51, 51, 0.1);
+}
+
+.movie-dislike-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Body ────────────────────────────────────────── */
+
+.movie-page-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.movie-page-section {
+  margin-bottom: 3rem;
+}
+
+.movie-page-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ff3333;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #4a0000;
+  padding-bottom: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.movie-page-description {
+  color: #d0a0a0;
+  line-height: 1.7;
   margin: 0;
-  color: #4b5563;
+}
+
+/* ── Evaluation form ─────────────────────────────── */
+
+.eval-form {
+  background: #1a0505;
+  border: 1.5px solid #4a0000;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.eval-form-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.eval-form-row {
+  margin-bottom: 0.75rem;
+}
+
+.eval-form-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #d0a0a0;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.eval-range {
+  width: 100%;
+  accent-color: #c0392b;
+  cursor: pointer;
+}
+
+.eval-textarea {
+  width: 100%;
+  background: #0d0000;
+  border: 1.5px solid #4a0000;
+  border-radius: 7px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.65rem 0.9rem;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.eval-textarea::placeholder {
+  color: #604040;
+}
+
+.eval-textarea:focus {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+}
+
+.eval-error {
+  color: #ff6666;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.eval-submit-btn {
+  background: #c0392b;
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  margin-top: 0.75rem;
+  transition: background 0.2s;
+}
+
+.eval-submit-btn:hover:not(:disabled) {
+  background: #e74c3c;
+}
+
+.eval-submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.eval-login-prompt {
+  color: #806060;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Evaluation cards ────────────────────────────── */
+
+.eval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eval-card {
+  background: #1a0505;
+  border: 1px solid #4a0000;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.eval-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.eval-author {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.eval-hating {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e74c3c;
+}
+
+/* ── Hate meter ──────────────────────────────────── */
+
+.hate-meter {
+  height: 4px;
+  background: #2a0505;
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.hate-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c0392b, #ff3333);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.eval-comment {
+  color: #d0a0a0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.eval-comment--deleted {
+  color: #604040;
+  font-style: italic;
+}
+
+.eval-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.eval-date {
+  font-size: 0.75rem;
+  color: #604040;
+}
+
+.eval-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eval-hate-btn {
+  background: rgba(192, 57, 43, 0.15);
+  border: 1px solid #4a0000;
+  color: #d0a0a0;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.eval-hate-btn:hover:not(:disabled) {
+  background: rgba(192, 57, 43, 0.3);
+  border-color: #c0392b;
+  color: #fff;
+}
+
+.eval-hate-btn--active {
+  background: rgba(192, 57, 43, 0.25);
+  border-color: #c0392b;
+  color: #ff6666;
+}
+
+.eval-hate-btn--active:hover:not(:disabled) {
+  background: rgba(192, 57, 43, 0.1);
+  color: #d0a0a0;
+}
+
+.eval-hate-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.eval-hates-count {
+  font-size: 0.75rem;
+  color: #806060;
+}
+
+.eval-delete-btn {
+  background: none;
+  border: 1px solid #4a0000;
+  color: #806060;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.eval-delete-btn:hover {
+  border-color: #c0392b;
+  color: #ff6666;
+}
+
+.eval-empty {
+  color: #604040;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+/* ── Loading / Error states ──────────────────────── */
+
+.movie-page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #c0392b;
+  font-size: 1rem;
+  min-height: 50vh;
+}
+
+.movie-page-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #ff6666;
+}
+
+.movie-page-error button {
+  margin-top: 1rem;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
 }

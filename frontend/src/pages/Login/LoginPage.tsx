@@ -1,58 +1,82 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const API_URL = import.meta.env.VITE_API_URL
+import { loginUser } from '../../api/auth'
+import { useAuth } from '../../context/AuthContext'
+import './Login.css'
 
 function LoginPage() {
+  const navigate = useNavigate()
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+    setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_URL}/users/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        console.log('Login successful! Token:', data.token)
-      } else {
-        console.error('Login failed:', data)
-      }
-    } catch (error) {
-      console.error('Error during fetch:', error)
+      const data = await loginUser(email, password)
+      login(data.token)
+      navigate('/')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="string"
-        placeholder="Email"
-        value={email}
-        onChange={e => {
-          setEmail(e.target.value)
-          console.log(e.target.value)
-        }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => {
-          setPassword(e.target.value)
-          console.log(e.target.value)
-        }}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-title">SIGN IN</h1>
+        <p className="auth-subtitle">Welcome back, critic.</p>
+
+        {error && <div className="auth-error">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-field">
+            <label htmlFor="email" className="auth-label">Email</label>
+            <input
+              id="email"
+              type="email"
+              className="auth-input"
+              placeholder="your@email.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="password" className="auth-label">Password</label>
+            <input
+              id="password"
+              type="password"
+              className="auth-input"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="auth-btn" disabled={isLoading}>
+            {isLoading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          No account?{' '}
+          <button className="auth-link-btn" onClick={() => navigate('/signup')}>
+            Create one
+          </button>
+        </p>
+      </div>
+    </div>
   )
 }
 

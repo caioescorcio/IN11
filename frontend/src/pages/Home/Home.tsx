@@ -1,58 +1,59 @@
 import { useMemo, useState } from 'react'
-import './Home.css'
 
-import reactLogo from '../../assets/react.svg'
 import { MovieCard } from '../../components/movie-card'
-import { useFetchMovies } from '../../hooks/useFetchMovies'
-
-interface MovieInterface {
-  id: number
-  title: string
-  poster_path: string
-  overview?: string
-  release_date?: string
-  [key: string]: unknown
-}
+import { useBackendMovies } from '../../hooks/useBackendMovies'
+import './Home.css'
 
 function Home() {
   const [searchInput, setSearchInput] = useState('')
-  // when loading page the movies are loaded
-  const { movies: fetchedMovies = [] } = useFetchMovies()
-  const movies = useMemo(() => fetchedMovies, [fetchedMovies])
+  const { movies, isLoading, error } = useBackendMovies()
 
-  const filterMovies = (movies: MovieInterface[]) => {
-    return movies.filter(movie =>
-      movie.title.toLowerCase().includes(searchInput.toLowerCase())
-    )
-  }
+  const filtered = useMemo(
+    () => movies.filter(m => m.title.toLowerCase().includes(searchInput.toLowerCase())),
+    [movies, searchInput]
+  )
 
   return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Popular Movies</h1>
-      <div className="card">
+    <div className="home">
+      <div className="home-hero">
+        <h1 className="home-title">HATE THE MOVIES</h1>
+        <p className="home-subtitle">
+          Rate the worst. Vent your frustrations. Join the critics.
+        </p>
         <input
+          className="home-search"
           type="text"
-          placeholder="Search movies..."
+          placeholder="Search movies to hate..."
           value={searchInput}
           onChange={e => setSearchInput(e.target.value)}
         />
       </div>
-      {filterMovies(movies).map((movie: MovieInterface) => (
-        <MovieCard
-          key={movie.id}
-          id={movie.id}
-          title={movie.title}
-          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-          overview={movie.overview}
-          release_date={movie.release_date}
-        />
-      ))}
-    </>
+
+      {error && (
+        <p className="home-error">Failed to load movies. Is the backend running?</p>
+      )}
+
+      {isLoading ? (
+        <div className="home-loading">
+          <span className="home-loading-spinner" />
+          Loading movies...
+        </div>
+      ) : (
+        <>
+          <p className="home-count">
+            {filtered.length} movie{filtered.length !== 1 ? 's' : ''} found
+          </p>
+          <div className="home-grid">
+            {filtered.map(movie => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+          {filtered.length === 0 && !isLoading && (
+            <p className="home-empty">No movies match your search.</p>
+          )}
+        </>
+      )}
+    </div>
   )
 }
 

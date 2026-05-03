@@ -169,7 +169,7 @@ router.post('/login', async (req, res) => {
     const userRepository = appDataSource.getRepository(User);
 
     if (!req.body.email || !req.body.password) {
-      return res.status(400).json({ error: 'Email and password required' });
+      return res.status(400).json({ message: 'Email and password required' });
     }
 
     const user = await userRepository.findOneBy({
@@ -177,7 +177,7 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -186,11 +186,11 @@ router.post('/login', async (req, res) => {
     );
 
     if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign(
-      { userId: user.user_id, is_admin: user.is_admin },
+      { userId: user.user_id, is_admin: user.is_admin, firstname: user.firstname },
       process.env.JWT_SECRET,
       {
         expiresIn: '1h',

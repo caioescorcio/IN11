@@ -1,0 +1,135 @@
+.auth-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  background: #1a0505;
+  border: 1.5px solid #4a0000;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.auth-title {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ff3333;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px rgba(255, 51, 51, 0.4);
+}
+
+.auth-subtitle {
+  margin: 0 0 2rem;
+  color: #806060;
+  font-size: 0.9rem;
+}
+
+.auth-error {
+  background: rgba(192, 57, 43, 0.15);
+  border: 1px solid #c0392b;
+  color: #ff6666;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  text-align: left;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.auth-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d0a0a0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.auth-input {
+  background: #0d0000;
+  border: 1.5px solid #4a0000;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  padding: 0.65rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input::placeholder {
+  color: #604040;
+}
+
+.auth-input:focus {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+}
+
+.auth-btn {
+  background: #c0392b;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+  margin-top: 0.5rem;
+}
+
+.auth-btn:hover:not(:disabled) {
+  background: #e74c3c;
+}
+
+.auth-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin: 1.5rem 0 0;
+  color: #806060;
+  font-size: 0.875rem;
+}
+
+.auth-link-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.auth-link-btn:hover {
+  color: #ff6666;
+  border-color: transparent;
+}

@@ -3,41 +3,45 @@ import { appDataSource } from '../datasource.js';
 import Hated from '../entities/hated.js';
 import { authenticateToken } from '../middlewares/auth.js';
 
-/**
- * @swagger
- * tags:
- * - name: Hateds
- * description: Hateds routes
- */
-
 const router = express.Router();
 
+const normalizeHated = (hated) => ({
+  user_id: hated.user_id,
+  movie_id: hated.movie_id,
+  movie: hated.movie
+    ? {
+        id: hated.movie.movie_id,
+        title: hated.movie.title,
+        description: hated.movie.description,
+        release_date: hated.movie.release_date,
+        rating: hated.movie.rating,
+        image_link: hated.movie.image_link,
+      }
+    : undefined,
+});
+
 /**
  * @swagger
- * /api/Hateds:
+ * /api/hateds:
  *   get:
- *     summary: Récupérer la liste des films marqués par l'utilisateur connecté
+ *     summary: Get the logged-in user's hated movies
  *     security:
  *       - BearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des films
+ *         description: List of hated movies
  */
 router.get('/', authenticateToken, function (req, res) {
-  const currentUserId = req.userInfo.userId;
+  const currentUserId = req.user.userId;
 
   appDataSource
     .getRepository(Hated)
     .find({
-      where: {
-        user: {
-          user_id: currentUserId,
-        },
-      },
-      relations: ['movie'], // get all the movies infos: does a joint
+      where: { user_id: currentUserId },
+      relations: ['movie'],
     })
-    .then(function (Hateds) {
-      res.json({ Hateds: Hateds });
+    .then(function (hateds) {
+      res.json({ Hateds: hateds.map(normalizeHated) });
     })
     .catch(function (error) {
       console.error(error);
@@ -47,9 +51,9 @@ router.get('/', authenticateToken, function (req, res) {
 
 /**
  * @swagger
- * /api/Hateds/add:
+ * /api/hateds/add:
  *   post:
- *     summary: Ajouter un film aux hateds de l'utilisateur
+ *     summary: Add a movie to the user's hateds
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -63,18 +67,17 @@ router.get('/', authenticateToken, function (req, res) {
  *                 type: string
  *     responses:
  *       201:
- *         description: Film ajouté
- *       500:
- *         description: Erreur serveur
+ *         description: Movie added to hateds
+ *       400:
+ *         description: Movie already in hateds
  */
 router.post('/add', authenticateToken, function (req, res) {
   const hatedRepository = appDataSource.getRepository(Hated);
-
-  const currentUserId = req.userInfo.userId;
+  const currentUserId = req.user.userId;
 
   const newHated = hatedRepository.create({
-    user: { id: currentUserId },
-    movie: { id: req.body.movie_id },
+    user_id: currentUserId,
+    movie_id: req.body.movie_id,
   });
 
   hatedRepository
@@ -85,9 +88,9 @@ router.post('/add', authenticateToken, function (req, res) {
     .catch(function (error) {
       console.error(error);
       if (error.code === '23505') {
-        res.status(400).json({
-          message: `This movie is already in your hateds.`,
-        });
+        res
+          .status(400)
+          .json({ message: 'This movie is already in your hateds.' });
       } else {
         res.status(500).json({ message: 'Error while creating the Hated' });
       }
@@ -96,9 +99,9 @@ router.post('/add', authenticateToken, function (req, res) {
 
 /**
  * @swagger
- * /api/Hateds/{movieId}:
+ * /api/hateds/{movieId}:
  *   delete:
- *     summary: Remove a movie from hateds
+ *     summary: Remove a movie from the user's hateds
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -107,15 +110,14 @@ router.post('/add', authenticateToken, function (req, res) {
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the Movie to unhated
  *     responses:
  *       204:
- *         description: Deleted successfully
+ *         description: Removed successfully
  *       404:
  *         description: Hated not found
  */
 router.delete('/:movieId', authenticateToken, function (req, res) {
-  const currentUserId = req.userInfo.userId;
+  const currentUserId = req.user.userId;
 
   appDataSource
     .getRepository(Hated)

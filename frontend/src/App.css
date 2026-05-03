@@ -1,6 +1,91 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* ── Navbar ──────────────────────────────────────── */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 56px;
+  background: #0d0000;
+  border-bottom: 2px solid #c0392b;
+  box-shadow: 0 2px 12px rgba(192, 57, 43, 0.25);
+}
+
+.navbar-brand {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff3333;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+  transition: color 0.2s;
+}
+
+.navbar-brand:hover {
+  color: #ff6666;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-link {
+  font-size: 0.875rem;
+  color: #d0a0a0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.navbar-link:hover {
+  color: #fff;
+}
+
+.navbar-btn {
+  background: #c0392b;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar-btn:hover {
+  background: #e74c3c;
+  color: #fff;
+  border-color: transparent;
+}
+
+.navbar-btn--outline {
+  background: transparent;
+  border: 1.5px solid #4a0000;
+  color: #d0a0a0;
+}
+
+.navbar-btn--outline:hover {
+  border-color: #c0392b;
+  color: #fff;
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.navbar-user {
+  font-size: 0.8rem;
+  color: #806060;
+}
+
+/* ── Main layout ─────────────────────────────────── */
+
+.app-main {
+  flex: 1;
 }
