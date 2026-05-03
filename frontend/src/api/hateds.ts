@@ -1,6 +1,6 @@
 import type { Hated } from '../types'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL ?? '/api'
 
 export async function fetchHateds(token: string): Promise<Hated[]> {
   const res = await fetch(`${API_URL}/hateds`, {

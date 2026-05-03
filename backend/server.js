@@ -31,6 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Serve built frontend — must come before DB middleware so static files skip the DB init
+app.get('/', (_req, res) => res.redirect('/index.html'));
 app.use(express.static(distPath));
 
 app.use(async (req, res, next) => {

@@ -3,6 +3,11 @@ import { defineConfig } from 'vitest/config'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': 'http://localhost:8081',
+    },
+  },
   plugins: [
     react({
       babel: {
