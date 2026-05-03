@@ -1,6 +1,8 @@
 import cors from 'cors';
 import express from 'express';
 import logger from 'morgan';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 import { appDataSource } from './datasource.js';
 import { swaggerSpec } from './docs/swagger.js';
@@ -11,12 +13,15 @@ import usersRouter from './routes/users.js';
 import { jsonErrorHandler } from './services/jsonErrorHandler.js';
 import { routeNotFoundJsonHandler } from './services/routeNotFoundJsonHandler.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const distPath = join(__dirname, '../frontend/dist');
+
 const apiRouter = express.Router();
 const app = express();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://localhost:8081'],
     credentials: true,
   }),
 );
@@ -24,6 +29,9 @@ app.use(
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Serve built frontend — must come before DB middleware so static files skip the DB init
+app.use(express.static(distPath));
 
 app.use(async (req, res, next) => {
   try {
@@ -43,6 +51,15 @@ apiRouter.use('/hateds', hatedsRouter);
 apiRouter.use('/evaluations', evaluationsRouter);
 app.use('/api', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// SPA fallback: serve index.html for any route that isn't /api or a static file
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(join(distPath, 'index.html'), (err) => {
+    if (err) next();
+  });
+});
+
 app.use(routeNotFoundJsonHandler); // this middleware must be registered after all routes to handle 404 correctly
 app.use(jsonErrorHandler); // this error handler must be registered after all middleware to catch all errors
 let isInitialized = false;
