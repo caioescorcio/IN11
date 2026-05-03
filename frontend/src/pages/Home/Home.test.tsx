@@ -1,39 +1,59 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, it, vi } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
 
 import Home from './Home'
 
-// mock the return function in the test file
-vi.mock('../../hooks/useFetchMovies', () => ({
-  useFetchMovies: () => ({
+vi.mock('../../hooks/useBackendMovies', () => ({
+  useBackendMovies: () => ({
     movies: [
-      { title: 'Inception', poster_path: '/inception.jpg' },
-      { title: 'Film A', poster_path: '/film_a.jpg' },
-      { title: 'Film B', poster_path: '/film_b.jpg' },
+      { id: 'a1', title: 'Inception', description: '', release_date: '2010-07-16', rating: 8.8, image_link: '' },
+      { id: 'b2', title: 'Film A', description: '', release_date: '2021-01-01', rating: 4.0, image_link: '' },
+      { id: 'c3', title: 'Film B', description: '', release_date: '2022-05-10', rating: 3.5, image_link: '' },
     ],
     isLoading: false,
     error: null,
   }),
 }))
 
-it('displays Home title with Popular Movies', () => {
-  render(<Home />)
-  expect(screen.getByText('Popular Movies')).toBeInTheDocument()
+vi.mock('../../context/AuthContext', () => ({
+  useAuth: () => ({ isAuthenticated: false, token: null, user: null }),
+}))
+
+vi.mock('../../hooks/useHateds', () => ({
+  useHateds: () => ({
+    hatedMovieIds: new Set<string>(),
+    addHated: vi.fn(),
+    removeHated: vi.fn(),
+    isPending: false,
+  }),
+}))
+
+const renderHome = () =>
+  render(
+    <MemoryRouter>
+      <Home />
+    </MemoryRouter>
+  )
+
+it('displays the main heading', () => {
+  renderHome()
+  expect(screen.getByText('HATE THE MOVIES')).toBeInTheDocument()
 })
 
 it('displays all movies when search bar is empty', () => {
-  render(<Home />)
+  renderHome()
   expect(screen.getByText('Inception')).toBeInTheDocument()
   expect(screen.getByText('Film A')).toBeInTheDocument()
   expect(screen.getByText('Film B')).toBeInTheDocument()
 })
 
-it('displays filtered movies when user types in the research bar', async () => {
+it('filters movies when user types in the search bar', async () => {
   const user = userEvent.setup()
-  render(<Home />)
+  renderHome()
 
-  const searchBar = screen.getByPlaceholderText('Search movies...')
+  const searchBar = screen.getByPlaceholderText('Search movies to hate...')
   await user.type(searchBar, 'Film')
 
   expect(screen.queryByText('Inception')).not.toBeInTheDocument()
@@ -41,14 +61,19 @@ it('displays filtered movies when user types in the research bar', async () => {
   expect(screen.getByText('Film B')).toBeInTheDocument()
 })
 
-it('doesnt display any movie when there arent compatible movies', async () => {
+it('shows no movies when search matches nothing', async () => {
   const user = userEvent.setup()
-  render(<Home />)
+  renderHome()
 
-  const searchBar = screen.getByPlaceholderText('Search movies...')
-  await user.type(searchBar, 'XXX')
+  const searchBar = screen.getByPlaceholderText('Search movies to hate...')
+  await user.type(searchBar, 'ZZZXXX')
 
   expect(screen.queryByText('Inception')).not.toBeInTheDocument()
   expect(screen.queryByText('Film A')).not.toBeInTheDocument()
   expect(screen.queryByText('Film B')).not.toBeInTheDocument()
+})
+
+it('shows movie count', () => {
+  renderHome()
+  expect(screen.getByText('3 movies found')).toBeInTheDocument()
 })

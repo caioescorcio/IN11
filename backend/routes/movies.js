@@ -11,6 +11,16 @@ import { authenticateToken } from '../middlewares/auth.js';
  */
 
 const router = express.Router();
+
+const normalizeMovie = (movie) => ({
+  id: movie.movie_id,
+  title: movie.title,
+  description: movie.description,
+  release_date: movie.release_date,
+  rating: movie.rating,
+  image_link: movie.image_link,
+});
+
 /**
  * @swagger
  * /api/movies:
@@ -26,7 +36,44 @@ router.get('/', function (req, res) {
     .getRepository(Movie)
     .find({})
     .then(function (movies) {
-      res.json({ movies: movies });
+      res.json({ movies: movies.map(normalizeMovie) });
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error while fetching movies' });
+    });
+});
+
+/**
+ * @swagger
+ * /api/movies/{movieId}:
+ *   get:
+ *     summary: Get a single movie
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Movie data
+ *       404:
+ *         description: Movie not found
+ */
+router.get('/:movieId', function (req, res) {
+  appDataSource
+    .getRepository(Movie)
+    .findOneBy({ movie_id: req.params.movieId })
+    .then(function (movie) {
+      if (!movie) {
+        return res.status(404).json({ message: 'Movie not found' });
+      }
+      res.json({ movie: normalizeMovie(movie) });
+    })
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error while fetching the movie' });
     });
 });
 

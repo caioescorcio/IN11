@@ -1,12 +1,125 @@
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.home {
+  width: 100%;
+  padding: 0 0 4rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.home-hero {
+  background: linear-gradient(180deg, #2a0000 0%, #0d0000 100%);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  border-bottom: 2px solid #c0392b;
+  margin-bottom: 2rem;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.home-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  color: #ff3333;
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 20px rgba(255, 51, 51, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0 0 0.5rem;
+  line-height: 1;
+}
+
+.home-subtitle {
+  color: #d0a0a0;
+  font-size: 1rem;
+  margin: 0 0 2rem;
+  letter-spacing: 0.04em;
+}
+
+.home-search {
+  width: min(480px, 100%);
+  padding: 0.75rem 1.25rem;
+  background: #1a0505;
+  border: 1.5px solid #4a0000;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.home-search::placeholder {
+  color: #806060;
+}
+
+.home-search:focus {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.25);
+}
+
+.home-count {
+  text-align: center;
+  color: #806060;
+  font-size: 0.85rem;
+  margin: 0 0 1.5rem;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+  padding: 0 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .home-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+.home-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #c0392b;
+  font-size: 1rem;
+  padding: 4rem;
+}
+
+.home-loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4a0000;
+  border-top-color: #c0392b;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.home-error {
+  text-align: center;
+  color: #ff6666;
+  padding: 2rem;
+  background: #1a0505;
+  border: 1px solid #4a0000;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 480px;
+}
+
+.home-empty {
+  text-align: center;
+  color: #806060;
+  padding: 3rem;
+  font-size: 1rem;
 }

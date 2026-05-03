@@ -1,0 +1,74 @@
+.my-hateds-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.my-hateds-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #4a0000;
+  padding-bottom: 0.75rem;
+}
+
+.my-hateds-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ff3333;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.my-hateds-count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #806060;
+}
+
+.my-hateds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .my-hateds-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+.my-hateds-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #604040;
+}
+
+.my-hateds-empty p {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+}
+
+.my-hateds-empty button {
+  background: #c0392b;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.my-hateds-empty button:hover {
+  background: #e74c3c;
+}
+
+.my-hateds-loading {
+  text-align: center;
+  padding: 3rem;
+  color: #c0392b;
+}
